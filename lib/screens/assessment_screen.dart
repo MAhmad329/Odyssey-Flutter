@@ -17,7 +17,7 @@ class AssessmentScreen extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: primaryColor,
           foregroundColor: Colors.black,
-          toolbarHeight: 80.h,
+          toolbarHeight: 75.h,
           title: Text(
             'Assessment',
             style: TextStyle(fontFamily: 'Kameron', fontSize: 48.sp),

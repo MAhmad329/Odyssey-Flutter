@@ -14,11 +14,11 @@ class InterestScreen extends StatelessWidget {
     final authService = Provider.of<AuthService>(context, listen: false);
     final user = authService.currentUser;
     return Scaffold(
-      backgroundColor: Color(0xFF264653),
+      backgroundColor: const Color(0xFF264653),
       appBar: AppBar(
         backgroundColor: primaryColor,
         foregroundColor: Colors.black,
-        toolbarHeight: 80.h,
+        toolbarHeight: 75.h,
         title: Text(
           'Personal',
           style: TextStyle(fontFamily: 'Kameron', fontSize: 48.sp),

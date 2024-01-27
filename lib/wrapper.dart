@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:odyssey/screens/assessment_screen.dart';
-import 'package:odyssey/screens/courses_screen.dart';
+import 'package:odyssey/screens/home_screen.dart';
 import 'package:odyssey/screens/login_screen.dart';
 import 'package:odyssey/services/auth_services.dart';
 import 'package:provider/provider.dart';
@@ -26,7 +26,7 @@ class Wrapper extends StatelessWidget {
         } else if (!user.hasCompletedSetup) {
           return const AssessmentScreen();
         } else {
-          return const CoursesScreen(); // Replace with your actual home screen
+          return HomeScreen();
         }
       },
     );

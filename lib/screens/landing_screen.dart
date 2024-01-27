@@ -53,6 +53,15 @@ class LandingScreen extends StatelessWidget {
                   buttonColor: primaryColor,
                   buttonWidth: 315.w,
                   buttonHeight: 65.h),
+              MyButton(
+                  onTap: () {
+                    Navigator.pushNamed(context, 'home_screen');
+                  },
+                  buttonText: 'Door',
+                  textColor: Colors.black,
+                  buttonColor: primaryColor,
+                  buttonWidth: 315.w,
+                  buttonHeight: 65.h),
             ],
           ),
         ),
