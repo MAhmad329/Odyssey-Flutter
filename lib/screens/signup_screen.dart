@@ -56,7 +56,7 @@ class SignupScreen extends StatelessWidget {
                       width: 360.w,
                       child: TextField(
                         style: const TextStyle(color: Colors.white),
-                        cursorColor: const Color(0xFFE9C46A),
+                        cursorColor: primaryColor,
                         controller: emailController,
                         decoration: kTextFieldDecoration.copyWith(
                           hintText: 'Email',
@@ -71,7 +71,7 @@ class SignupScreen extends StatelessWidget {
                       child: TextField(
                         style: const TextStyle(color: Colors.white),
                         obscureText: true,
-                        cursorColor: const Color(0xFFE9C46A),
+                        cursorColor: primaryColor,
                         controller: passwordController,
                         decoration: kTextFieldDecoration.copyWith(
                           hintText: 'Password',
@@ -97,7 +97,7 @@ class SignupScreen extends StatelessWidget {
                       },
                       buttonText: 'Signup',
                       textColor: Colors.black,
-                      buttonColor: const Color(0xFFE9C46A),
+                      buttonColor: primaryColor,
                       buttonWidth: 355.w,
                       buttonHeight: 50.h,
                     ),
@@ -114,7 +114,7 @@ class SignupScreen extends StatelessWidget {
                       'Already have an account?',
                       style: TextStyle(
                         fontSize: 22.sp,
-                        color: const Color(0xFFE9C46A),
+                        color: primaryColor,
                       ),
                     ),
                     SizedBox(
@@ -126,7 +126,7 @@ class SignupScreen extends StatelessWidget {
                       },
                       buttonText: 'Login',
                       textColor: Colors.black,
-                      buttonColor: const Color(0xFFE9C46A),
+                      buttonColor: primaryColor,
                       buttonWidth: 355.w,
                       buttonHeight: 50.h,
                     ),

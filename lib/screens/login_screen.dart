@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:odyssey/services/auth_services.dart';
-import 'package:odyssey/widgets/text_field.dart';
 import 'package:provider/provider.dart';
 import '../constants.dart';
 import '../widgets/button.dart';
@@ -57,7 +56,7 @@ class LoginScreen extends StatelessWidget {
                       width: 360.w,
                       child: TextField(
                         style: const TextStyle(color: Colors.white),
-                        cursorColor: const Color(0xFFE9C46A),
+                        cursorColor: primaryColor,
                         controller: emailController,
                         decoration: kTextFieldDecoration.copyWith(
                           hintText: 'Email',
@@ -72,7 +71,7 @@ class LoginScreen extends StatelessWidget {
                       child: TextField(
                         style: const TextStyle(color: Colors.white),
                         obscureText: true,
-                        cursorColor: const Color(0xFFE9C46A),
+                        cursorColor: primaryColor,
                         controller: passwordController,
                         decoration: kTextFieldDecoration.copyWith(
                           hintText: 'Password',
@@ -97,7 +96,7 @@ class LoginScreen extends StatelessWidget {
                       },
                       buttonText: 'Login',
                       textColor: Colors.black,
-                      buttonColor: const Color(0xFFE9C46A),
+                      buttonColor: primaryColor,
                       buttonWidth: 355.w,
                       buttonHeight: 50.h,
                     ),
@@ -114,7 +113,7 @@ class LoginScreen extends StatelessWidget {
                       'Don\'t have an account?',
                       style: TextStyle(
                         fontSize: 22.sp,
-                        color: const Color(0xFFE9C46A),
+                        color: primaryColor,
                       ),
                     ),
                     SizedBox(
@@ -127,7 +126,7 @@ class LoginScreen extends StatelessWidget {
                       },
                       buttonText: 'Register',
                       textColor: Colors.black,
-                      buttonColor: const Color(0xFFE9C46A),
+                      buttonColor: primaryColor,
                       buttonWidth: 355.w,
                       buttonHeight: 50.h,
                     ),

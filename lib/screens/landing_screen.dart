@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:odyssey/constants.dart';
 import 'package:odyssey/widgets/button.dart';
-import 'package:provider/provider.dart';
-import '../services/auth_services.dart';
 
 class LandingScreen extends StatelessWidget {
   const LandingScreen({Key? key}) : super(key: key);
@@ -51,7 +50,7 @@ class LandingScreen extends StatelessWidget {
                   },
                   buttonText: 'Get Started',
                   textColor: Colors.black,
-                  buttonColor: const Color(0xFFE9C46A),
+                  buttonColor: primaryColor,
                   buttonWidth: 315.w,
                   buttonHeight: 65.h),
             ],

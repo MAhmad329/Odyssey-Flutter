@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:odyssey/constants.dart';
 import 'package:odyssey/widgets/button.dart';
 import 'package:provider/provider.dart';
 
@@ -13,7 +14,7 @@ class InterestScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Color(0xFF264653),
       appBar: AppBar(
-        backgroundColor: const Color(0xFFE9C46A),
+        backgroundColor: primaryColor,
         foregroundColor: Colors.black,
         toolbarHeight: 80.h,
         title: Text(
@@ -75,7 +76,7 @@ class InterestScreen extends StatelessWidget {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: isSelected
-                              ? const Color(0xFFE9C46A)
+                              ? primaryColor
                               : const Color(
                                   0xFF2A9D8F), // Highlight selected option
                           shape: RoundedRectangleBorder(

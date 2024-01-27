@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+Color primaryColor = const Color(0xFFE9C46A);
 
 InputDecoration kTextFieldDecoration = const InputDecoration(
   hintText: 'hint text',
