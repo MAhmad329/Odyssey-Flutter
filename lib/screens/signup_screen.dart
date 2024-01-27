@@ -87,17 +87,18 @@ class _SignupScreenState extends State<SignupScreen> {
                     MyButton(
                       onTap: () async {
                         try {
-                          await authService.createUserWithEmailAndPassword(
-                              emailController.text, passwordController.text);
-                          if (!mounted) {
-                            return;
+                          var user =
+                              await authService.createUserWithEmailAndPassword(
+                                  emailController.text,
+                                  passwordController.text);
+                          if (!mounted) return;
+                          if (user != null) {
+                            Navigator.pushReplacementNamed(
+                                context, 'assessment_screen');
                           }
-                          Navigator.pushReplacementNamed(
-                              context, 'assessment_screen');
                         } catch (e) {
-                          if (!mounted) {
-                            return;
-                          }
+                          if (!mounted) return;
+
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content:

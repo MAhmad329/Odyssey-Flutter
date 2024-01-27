@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:odyssey/models/InterestModel.dart';
 import 'package:odyssey/screens/assessment_screen.dart';
+import 'package:odyssey/screens/courses_screen.dart';
 import 'package:odyssey/screens/interest_screen.dart';
 import 'package:odyssey/screens/landing_screen.dart';
 import 'package:odyssey/screens/login_screen.dart';
@@ -22,7 +23,7 @@ Future main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(
     MultiProvider(providers: [
-      Provider<AuthService>(
+      ChangeNotifierProvider(
         create: (context) => AuthService(),
       ),
       ChangeNotifierProvider(
@@ -56,6 +57,7 @@ class MyApp extends StatelessWidget {
               'interest_screen': (context) => const InterestScreen(),
               'login_screen': (context) => const LoginScreen(),
               'signup_screen': (context) => const SignupScreen(),
+              'courses_screen': (context) => const CoursesScreen(),
             },
           );
         });

@@ -3,14 +3,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:odyssey/constants.dart';
 import 'package:odyssey/widgets/button.dart';
 import 'package:provider/provider.dart';
-
 import '../models/InterestModel.dart';
+import '../services/auth_services.dart';
 
 class InterestScreen extends StatelessWidget {
   const InterestScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context, listen: false);
+    final user = authService.currentUser;
     return Scaffold(
       backgroundColor: Color(0xFF264653),
       appBar: AppBar(
@@ -25,9 +27,6 @@ class InterestScreen extends StatelessWidget {
       ),
       body: Consumer<InterestModel>(
         builder: (context, interestModel, child) {
-          bool isOptionSelected = interestModel.selectedInterest.isNotEmpty;
-          bool isSubmitEnabled =
-              interestModel.currentQuestionIndex == 1 && isOptionSelected;
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -131,8 +130,19 @@ class InterestScreen extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.only(right: 25.w),
                       child: MyButton(
-                        onTap: () {
-                          if (isSubmitEnabled) {
+                        onTap: () async {
+                          if (interestModel.currentQuestionIndex == 1 &&
+                              interestModel.selectedInterest.isNotEmpty) {
+                            // Update user's interest
+                            if (user != null) {
+                              await authService.updateUserInterest(
+                                  user.uid, interestModel.selectedInterest);
+                              await authService.completeSetup(
+                                  user.uid); // Mark setup as complete
+                            }
+                            // Navigate to the HomeScreen or next screen after setup
+                            Navigator.pushReplacementNamed(
+                                context, 'courses_screen');
                           } else {
                             interestModel.goToNextQuestion();
                           }

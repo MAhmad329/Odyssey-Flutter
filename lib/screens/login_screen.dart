@@ -88,17 +88,31 @@ class _LoginScreenState extends State<LoginScreen> {
                     MyButton(
                       onTap: () async {
                         try {
-                          await authService.signInWithEmailAndPassword(
-                              emailController.text, passwordController.text);
-                          if (!mounted) {
-                            return;
+                          var user =
+                              await authService.signInWithEmailAndPassword(
+                                  emailController.text,
+                                  passwordController.text);
+                          if (!mounted) return;
+
+                          if (user != null) {
+                            if (user.hasCompletedSetup) {
+                              Navigator.pushReplacementNamed(
+                                  context, 'courses_screen');
+                            } else {
+                              Navigator.pushReplacementNamed(
+                                  context, 'assessment_screen');
+                            }
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                    "Login failed, please check your credentials"),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
                           }
-                          Navigator.pushReplacementNamed(
-                              context, 'assessment_screen');
                         } catch (e) {
-                          if (!mounted) {
-                            return;
-                          }
+                          if (!mounted) return;
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content:
