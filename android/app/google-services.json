@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "235827302979",
+    "project_id": "odyssey-50af9",
+    "storage_bucket": "odyssey-50af9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:235827302979:android:65f226bc748f33777ffaf6",
+        "android_client_info": {
+          "package_name": "com.example.odyssey"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAlAsPDyGyq-EqiVqpDpr_lXi3yjc5K4Sw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
