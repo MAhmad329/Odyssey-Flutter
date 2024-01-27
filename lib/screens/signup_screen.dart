@@ -5,13 +5,18 @@ import 'package:provider/provider.dart';
 import '../constants.dart';
 import '../widgets/button.dart';
 
-class SignupScreen extends StatelessWidget {
+class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
 
   @override
+  State<SignupScreen> createState() => _SignupScreenState();
+}
+
+class _SignupScreenState extends State<SignupScreen> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  @override
   Widget build(BuildContext context) {
-    TextEditingController emailController = TextEditingController();
-    TextEditingController passwordController = TextEditingController();
     final authService = Provider.of<AuthService>(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -84,8 +89,15 @@ class SignupScreen extends StatelessWidget {
                         try {
                           await authService.createUserWithEmailAndPassword(
                               emailController.text, passwordController.text);
-                          Navigator.pop(context);
+                          if (!mounted) {
+                            return;
+                          }
+                          Navigator.pushReplacementNamed(
+                              context, 'assessment_screen');
                         } catch (e) {
+                          if (!mounted) {
+                            return;
+                          }
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content:
@@ -139,5 +151,12 @@ class SignupScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 }
