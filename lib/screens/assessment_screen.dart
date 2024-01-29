@@ -3,8 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:odyssey/constants.dart';
 import 'package:odyssey/widgets/button.dart';
 import 'package:provider/provider.dart';
-
-import '../models/AssessmentModel.dart';
+import '../Providers/AssessmentProvider.dart';
 
 class AssessmentScreen extends StatelessWidget {
   const AssessmentScreen({Key? key}) : super(key: key);
@@ -24,7 +23,7 @@ class AssessmentScreen extends StatelessWidget {
           ),
           centerTitle: true,
         ),
-        body: Consumer<AssessmentModel>(
+        body: Consumer<AssessmentProvider>(
           builder: (context, assessmentModel, child) {
             bool isLastQuestion = assessmentModel.isLastQuestion;
             bool isFirstQuestion = assessmentModel.isFirstQuestion;
@@ -73,8 +72,7 @@ class AssessmentScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      if (!assessmentModel
-                          .isFirstQuestion) // No options for the first question
+                      if (!assessmentModel.isFirstQuestion)
                         ...assessmentModel.currentQuestion.options.map(
                           (option) {
                             bool isSelected =

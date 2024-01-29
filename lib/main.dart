@@ -2,8 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:odyssey/models/InterestModel.dart';
-import 'package:odyssey/models/PageProvider.dart';
+import 'package:odyssey/Providers/AssessmentProvider.dart';
+import 'package:odyssey/Providers/CourseListProvider.dart';
+import 'package:odyssey/Providers/InterestProvider.dart';
+import 'package:odyssey/Providers/PageProvider.dart';
+import 'package:odyssey/Providers/SearchProvider.dart';
 import 'package:odyssey/screens/assessment_screen.dart';
 import 'package:odyssey/screens/home_screen.dart';
 import 'package:odyssey/screens/interest_screen.dart';
@@ -14,7 +17,6 @@ import 'package:odyssey/services/auth_services.dart';
 import 'package:odyssey/wrapper.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
-import 'models/AssessmentModel.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,16 +27,25 @@ Future main() async {
   runApp(
     MultiProvider(providers: [
       ChangeNotifierProvider(
+        create: (context) => AuthServiceProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => SearchProvider(),
+      ),
+      ChangeNotifierProvider(
         create: (context) => PageProvider(),
       ),
-      ChangeNotifierProvider(
-        create: (context) => AuthService(),
+      ChangeNotifierProxyProvider<AuthServiceProvider, CourseListProvider>(
+        create: (context) => CourseListProvider(
+            Provider.of<AuthServiceProvider>(context, listen: false)),
+        update: (context, authServiceProvider, previous) =>
+            CourseListProvider(authServiceProvider),
       ),
       ChangeNotifierProvider(
-        create: (context) => AssessmentModel(),
+        create: (context) => AssessmentProvider(),
       ),
       ChangeNotifierProvider(
-        create: (context) => InterestModel(),
+        create: (context) => InterestProvider(),
       ),
     ], child: const MyApp()),
   );
@@ -43,7 +54,6 @@ Future main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(

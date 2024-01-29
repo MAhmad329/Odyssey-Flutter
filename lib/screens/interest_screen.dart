@@ -3,15 +3,21 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:odyssey/constants.dart';
 import 'package:odyssey/widgets/button.dart';
 import 'package:provider/provider.dart';
-import '../models/InterestModel.dart';
+import '../Providers/InterestProvider.dart';
 import '../services/auth_services.dart';
 
-class InterestScreen extends StatelessWidget {
+class InterestScreen extends StatefulWidget {
   const InterestScreen({Key? key}) : super(key: key);
 
   @override
+  State<InterestScreen> createState() => _InterestScreenState();
+}
+
+class _InterestScreenState extends State<InterestScreen> {
+  @override
   Widget build(BuildContext context) {
-    final authService = Provider.of<AuthService>(context, listen: false);
+    final authService =
+        Provider.of<AuthServiceProvider>(context, listen: false);
     final user = authService.currentUser;
     return Scaffold(
       backgroundColor: const Color(0xFF264653),
@@ -25,7 +31,7 @@ class InterestScreen extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: Consumer<InterestModel>(
+      body: Consumer<InterestProvider>(
         builder: (context, interestModel, child) {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -76,8 +82,7 @@ class InterestScreen extends StatelessWidget {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: isSelected
                               ? primaryColor
-                              : const Color(
-                                  0xFF2A9D8F), // Highlight selected option
+                              : const Color(0xFF2A9D8F),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25),
                           ),
@@ -141,8 +146,10 @@ class InterestScreen extends StatelessWidget {
                                   user.uid); // Mark setup as complete
                             }
                             // Navigate to the HomeScreen or next screen after setup
-                            Navigator.pushReplacementNamed(
-                                context, 'courses_screen');
+                            if (mounted) {
+                              Navigator.pushReplacementNamed(
+                                  context, 'home_screen');
+                            }
                           } else {
                             interestModel.goToNextQuestion();
                           }

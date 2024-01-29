@@ -4,7 +4,7 @@ import 'package:odyssey/screens/profile_screen.dart';
 import 'package:odyssey/screens/progress_screen.dart';
 import 'package:provider/provider.dart';
 import '../constants.dart';
-import '../models/PageProvider.dart';
+import '../Providers/PageProvider.dart';
 import 'courses_screen.dart';
 import 'learning_screen.dart';
 
@@ -18,6 +18,8 @@ class HomeScreen extends StatelessWidget {
     return Consumer<PageProvider>(
       builder: (context, pageProvider, child) {
         return Scaffold(
+          resizeToAvoidBottomInset: false,
+          backgroundColor: const Color(0xFF264653),
           appBar: AppBar(
             backgroundColor: primaryColor,
             foregroundColor: Colors.black,
@@ -34,8 +36,8 @@ class HomeScreen extends StatelessWidget {
               pageProvider.selectedIndex;
             },
             children: const [
-              LearningScreen(),
               CoursesScreen(),
+              LearningScreen(),
               ProgressScreen(),
               ProfileScreen(),
             ],
@@ -67,18 +69,16 @@ class HomeScreen extends StatelessWidget {
                 fontFamily: 'Kameron',
                 fontSize: 16.sp,
               ),
-              backgroundColor:
-                  primaryColor, // This sets the background color to yellow
-              type: BottomNavigationBarType
-                  .fixed, // This ensures all labels are shown
+              backgroundColor: primaryColor,
+              type: BottomNavigationBarType.fixed,
               items: const [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.code),
-                  label: 'Learn',
-                ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.menu_book),
                   label: 'Courses',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.code),
+                  label: 'Learn',
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.bar_chart),

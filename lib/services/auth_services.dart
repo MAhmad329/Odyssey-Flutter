@@ -3,12 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import '../models/UserModel.dart';
 
-class AuthService with ChangeNotifier {
+class AuthServiceProvider with ChangeNotifier {
   final auth.FirebaseAuth _firebaseAuth = auth.FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   User? _currentUser;
-
   User? get currentUser => _currentUser;
 
   Stream<User?> get user {
@@ -23,12 +22,14 @@ class AuthService with ChangeNotifier {
     var snapshot =
         await _firestore.collection('users').doc(firebaseUser.uid).get();
     var userData = snapshot.data();
+
     bool hasCompletedSetup = userData?['hasCompletedSetup'] ?? false;
     String? selectedInterest = userData?['selectedInterest'];
 
     _currentUser = User(firebaseUser.uid, firebaseUser.email,
         hasCompletedSetup: hasCompletedSetup,
         selectedInterest: selectedInterest);
+
     return _currentUser;
   }
 

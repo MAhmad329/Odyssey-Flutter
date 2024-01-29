@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class InterestModel with ChangeNotifier {
+class InterestProvider with ChangeNotifier {
   String _selectedInterest = '';
   int _currentQuestionIndex = 0;
 

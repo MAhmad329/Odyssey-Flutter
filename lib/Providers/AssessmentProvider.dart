@@ -1,18 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
-class Question {
-  String text;
-  List<String> options;
-  String correctAnswer;
+import '../models/QuestionModel.dart';
 
-  Question({
-    required this.text,
-    required this.options,
-    required this.correctAnswer,
-  });
-}
-
-class AssessmentModel with ChangeNotifier {
+class AssessmentProvider with ChangeNotifier {
   int _currentQuestionIndex = 0;
   final Map<int, String> _selectedOptions = {};
   bool get isFirstQuestion => _currentQuestionIndex == 0;
@@ -23,7 +13,6 @@ class AssessmentModel with ChangeNotifier {
       options: ['Option A', 'Option B', 'Option C', 'Option D'],
       correctAnswer: 'Option A',
     ),
-    // Add more Question instances for the rest of your assessment
     Question(
       text: 'What does the \'var\' keyword in JavaScript declare?',
       options: [
@@ -54,7 +43,6 @@ class AssessmentModel with ChangeNotifier {
       ],
       correctAnswer: 'A variable with function scope',
     ),
-    // ...other questions
   ];
 
   Question get currentQuestion => _questions[_currentQuestionIndex];

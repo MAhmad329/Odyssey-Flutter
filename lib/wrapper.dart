@@ -11,7 +11,7 @@ class Wrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authService = Provider.of<AuthService>(context);
+    final authService = Provider.of<AuthServiceProvider>(context);
     return StreamBuilder<User?>(
       stream: authService.user,
       builder: (_, snapshot) {

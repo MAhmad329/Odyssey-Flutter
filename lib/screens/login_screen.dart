@@ -18,7 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authService = Provider.of<AuthService>(context);
+    final authService = Provider.of<AuthServiceProvider>(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xFF264653),
@@ -97,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           if (user != null) {
                             if (user.hasCompletedSetup) {
                               Navigator.pushReplacementNamed(
-                                  context, 'courses_screen');
+                                  context, 'home_screen');
                             } else {
                               Navigator.pushReplacementNamed(
                                   context, 'assessment_screen');
