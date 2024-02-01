@@ -4,6 +4,7 @@ import 'package:odyssey/screens/home_screen.dart';
 import 'package:odyssey/screens/login_screen.dart';
 import 'package:odyssey/services/auth_services.dart';
 import 'package:provider/provider.dart';
+import 'constants.dart';
 import 'models/UserModel.dart';
 
 class Wrapper extends StatelessWidget {
@@ -16,8 +17,13 @@ class Wrapper extends StatelessWidget {
       stream: authService.user,
       builder: (_, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(
-              body: Center(child: CircularProgressIndicator()));
+          return Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(
+                color: primaryColor,
+              ),
+            ),
+          );
         }
 
         final User? user = snapshot.data;

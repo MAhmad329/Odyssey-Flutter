@@ -11,4 +11,20 @@ class PageProvider with ChangeNotifier {
     _selectedIndex = index;
     notifyListeners();
   }
+
+  bool _isCourseSelected = true;
+  bool get isCourseSelected => _isCourseSelected;
+
+  void toggleMode(bool isCourseSelected) {
+    _isCourseSelected = isCourseSelected;
+    notifyListeners();
+  }
+
+  bool _isCompletedSelected = true;
+  bool get isCompletedSelected => _isCompletedSelected;
+
+  void toggleProgressMode(bool isCompletedSelected) {
+    _isCompletedSelected = isCompletedSelected;
+    notifyListeners();
+  }
 }

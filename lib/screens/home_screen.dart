@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import '../constants.dart';
 import '../Providers/PageProvider.dart';
 import 'courses_screen.dart';
-import 'learning_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -31,13 +30,17 @@ class HomeScreen extends StatelessWidget {
             centerTitle: true,
           ),
           body: PageView(
+            physics: const NeverScrollableScrollPhysics(),
             controller: _pageController,
             onPageChanged: (index) {
-              pageProvider.selectedIndex;
+              if (index != 1) {
+                // Exclude 'Learn' screen index
+                pageProvider.selectedIndex = index;
+              }
             },
-            children: const [
+            children: [
               CoursesScreen(),
-              LearningScreen(),
+              CoursesScreen(), // added just for replacement
               ProgressScreen(),
               ProfileScreen(),
             ],
@@ -47,8 +50,11 @@ class HomeScreen extends StatelessWidget {
             child: BottomNavigationBar(
               currentIndex: pageProvider.selectedIndex,
               onTap: (index) {
-                _pageController.jumpToPage(index);
-                pageProvider.selectedIndex = index;
+                if (index != 1) {
+                  // Check if the tapped item is not 'Learn'
+                  _pageController.jumpToPage(index);
+                  pageProvider.selectedIndex = index;
+                }
               },
               selectedItemColor: const Color(0xFF2A9D8F),
               unselectedItemColor: Colors.black,

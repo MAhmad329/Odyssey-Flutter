@@ -25,6 +25,7 @@ class CustomSearchBar extends StatelessWidget {
           suffixIcon: Icon(
             Icons.search,
             size: 35.r,
+            color: Colors.grey,
           ),
           filled: true,
           fillColor: Colors.white,

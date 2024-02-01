@@ -4,6 +4,7 @@ import 'package:odyssey/widgets/button.dart';
 import 'package:provider/provider.dart';
 import '../Providers/CourseListProvider.dart';
 import '../Providers/SearchProvider.dart';
+import '../models/CourseModel.dart';
 import '../widgets/course_card.dart';
 import '../widgets/custom_search_bar.dart';
 
@@ -23,9 +24,7 @@ class CoursesScreen extends StatelessWidget {
         const CustomSearchBar(),
         _buildTabBar(context, courseListProvider),
         Expanded(
-          child: courseListProvider.showMyList
-              ? _buildCourseList(context, true)
-              : _buildCourseList(context, false),
+          child: _buildCourseList(context, courseListProvider.showMyList),
         ),
       ],
     );
@@ -66,11 +65,12 @@ class CoursesScreen extends StatelessWidget {
   }
 
   Widget _buildCourseList(BuildContext context, bool isMyList) {
+    final courseListProvider =
+        Provider.of<CourseListProvider>(context, listen: false);
     return Consumer<SearchProvider>(
       builder: (context, searchProvider, child) {
-        final courses = isMyList
-            ? Provider.of<CourseListProvider>(context, listen: false).myList
-            : searchProvider.searchResults;
+        List<Course> courses = searchProvider.getFilteredCourses(
+            isMyList, courseListProvider.myList);
 
         return ListView.builder(
           itemCount: courses.length,
@@ -80,8 +80,6 @@ class CoursesScreen extends StatelessWidget {
               course: course,
               isInMyList: isMyList,
               onActionPressed: () {
-                final courseListProvider =
-                    Provider.of<CourseListProvider>(context, listen: false);
                 if (isMyList) {
                   courseListProvider.removeFromMyList(course);
                 } else {

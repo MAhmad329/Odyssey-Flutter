@@ -11,23 +11,147 @@ class CourseListProvider with ChangeNotifier {
     _fetchMyList();
   }
 
+  Stream<List<Course>> get courseStream {
+    if (_authService.currentUser == null) {
+      return Stream.value([]);
+    }
+    String userId = _authService.currentUser!.uid;
+
+    return _firestore
+        .collection('users')
+        .doc(userId)
+        .collection('interestedCourses')
+        .snapshots()
+        .map(
+      (snapshot) {
+        return snapshot.docs
+            .map((doc) {
+              // Assuming each doc is a map representing a Course,
+              // and you have the topics available in _allCourses.
+              String courseName = doc.data()['name'];
+              Course? fullCourse = _allCourses.firstWhere(
+                  (c) => c.name == courseName,
+                  orElse: () => Course(name: '', description: '', topics: []));
+
+              return fullCourse != null
+                  ? Course.fromMap(doc.data(), fullCourse.topics)
+                  : null;
+            })
+            .whereType<Course>()
+            .toList(); // Filter out any null values
+      },
+    );
+  }
+
   final List<Course> _allCourses = [
     Course(
-        name: 'Java',
-        description: 'Java from zero-to-hero for beginners with practice'),
+      name: 'Java',
+      description: 'Java from zero-to-hero for beginners with practice',
+      topics: [
+        Topic(
+            title: 'Introduction to Java',
+            content: 'Java is...',
+            codeExample:
+                "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Hello World\");\n    }\n}"),
+        Topic(
+          title: 'Variables in Java',
+          content: 'Variables are are...',
+          // No code example for this topic
+        ),
+        Topic(
+            title: 'Loops in Java',
+            content: 'Loops are...',
+            codeExample:
+                "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Something about loops\");\n    }\n}"),
+        Topic(
+            title: 'If-Else in Java',
+            content: 'If-Else are...',
+            codeExample:
+                "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Something about ifelse\");\n    }\n}"),
+      ],
+    ),
     Course(
-        name: 'Flutter',
-        description: 'Flutter from zero-to-hero for beginners with practice'),
+      name: 'Python',
+      description: 'Python from zero-to-hero for beginners with practice',
+      topics: [
+        Topic(
+            title: 'Introduction to Java',
+            content: 'Java is...',
+            codeExample:
+                "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Hello World\");\n    }\n}"),
+        Topic(
+          title: 'Variables in Java',
+          content: 'Variables are are...',
+          // No code example for this topic
+        ),
+        Topic(
+            title: 'Loops in Java',
+            content: 'Loops are...',
+            codeExample:
+                "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Something about loops\");\n    }\n}"),
+        Topic(
+            title: 'If-Else in Java',
+            content: 'If-Else are...',
+            codeExample:
+                "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Something about ifelse\");\n    }\n}"),
+      ],
+    ),
     Course(
-        name: 'React',
-        description: 'React from zero-to-hero for beginners with practice'),
+      name: 'React',
+      description: 'React from zero-to-hero for beginners with practice',
+      topics: [
+        Topic(
+            title: 'Introduction to Java',
+            content: 'Java is...',
+            codeExample:
+                "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Hello World\");\n    }\n}"),
+        Topic(
+          title: 'Variables in Java',
+          content: 'Variables are are...',
+          // No code example for this topic
+        ),
+        Topic(
+            title: 'Loops in Java',
+            content: 'Loops are...',
+            codeExample:
+                "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Something about loops\");\n    }\n}"),
+        Topic(
+            title: 'If-Else in Java',
+            content: 'If-Else are...',
+            codeExample:
+                "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Something about ifelse\");\n    }\n}"),
+      ],
+    ),
     Course(
-        name: 'Cyber',
-        description: 'React from zero-to-hero for beginners with practice'),
+      name: 'Cyber',
+      description: 'React from zero-to-hero for beginners with practice',
+      topics: [
+        Topic(
+            title: 'Introduction to Java',
+            content: 'Java is...',
+            codeExample:
+                "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Hello World\");\n    }\n}"),
+        Topic(
+          title: 'Variables in Java',
+          content: 'Variables are are...',
+          // No code example for this topic
+        ),
+        Topic(
+            title: 'Loops in Java',
+            content: 'Loops are...',
+            codeExample:
+                "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Something about loops\");\n    }\n}"),
+        Topic(
+            title: 'If-Else in Java',
+            content: 'If-Else are...',
+            codeExample:
+                "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Something about ifelse\");\n    }\n}"),
+      ],
+    ),
   ];
 
   List<Course> _myList = [];
-  bool _showMyList = false; // Toggle between all courses and my list
+  bool _showMyList = true; // Toggle between all courses and my list
   List<Course> get myList => _myList;
   List<Course> get courses => _showMyList ? _myList : _allCourses;
   bool get showMyList => _showMyList;
@@ -36,6 +160,16 @@ class CourseListProvider with ChangeNotifier {
   void toggleView(bool showMyList) {
     _showMyList = showMyList;
     notifyListeners();
+  }
+
+  Course? _currentCourse;
+
+  void setCurrentCourse(Course course) {
+    _currentCourse = course;
+  }
+
+  Course? getCurrentCourse() {
+    return _currentCourse;
   }
 
   Future<void> _fetchMyList() async {
@@ -51,7 +185,21 @@ class CourseListProvider with ChangeNotifier {
         .doc(userId)
         .collection('interestedCourses')
         .get();
-    _myList = snapshot.docs.map((doc) => Course.fromMap(doc.data())).toList();
+
+    _myList = snapshot.docs
+        .map((doc) {
+          String courseName = doc.data()['name'];
+          Course? fullCourse = _allCourses.firstWhere(
+              (c) => c.name == courseName,
+              orElse: () => Course(name: '', description: '', topics: []));
+
+          // If the course exists in _allCourses, use its topics; otherwise, return null
+          return fullCourse != null
+              ? Course.fromMap(doc.data(), fullCourse.topics)
+              : null;
+        })
+        .whereType<Course>()
+        .toList(); // Remove any nulls from the list
 
     if (isFirstTime) {
       String? selectedInterest = _authService.currentUser?.selectedInterest;
@@ -74,25 +222,25 @@ class CourseListProvider with ChangeNotifier {
     if (interest.toLowerCase().contains('websites')) {
       return _allCourses.firstWhere(
         (c) => c.name == 'Flutter',
-        orElse: () => Course(name: '', description: ''),
+        orElse: () => Course(name: '', description: '', topics: []),
       );
     } else if (interest.toLowerCase().contains('network')) {
       return _allCourses.firstWhere(
         (c) => c.name == 'Cyber',
-        orElse: () => Course(name: '', description: ''),
+        orElse: () => Course(name: '', description: '', topics: []),
       );
     } else if (interest.toLowerCase().contains('data')) {
       return _allCourses.firstWhere(
         (c) => c.name == 'React',
-        orElse: () => Course(name: '', description: ''),
+        orElse: () => Course(name: '', description: '', topics: []),
       );
     } else if (interest.toLowerCase().contains('smart')) {
       return _allCourses.firstWhere(
         (c) => c.name == 'Java',
-        orElse: () => Course(name: '', description: ''),
+        orElse: () => Course(name: '', description: '', topics: []),
       );
     }
-    return Course(name: '', description: '');
+    return Course(name: '', description: '', topics: []);
   }
 
   Future<void> addToMyList(Course course) async {

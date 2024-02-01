@@ -7,6 +7,7 @@ import 'package:odyssey/Providers/CourseListProvider.dart';
 import 'package:odyssey/Providers/InterestProvider.dart';
 import 'package:odyssey/Providers/PageProvider.dart';
 import 'package:odyssey/Providers/SearchProvider.dart';
+import 'package:odyssey/providers/CourseContentProvider.dart';
 import 'package:odyssey/screens/assessment_screen.dart';
 import 'package:odyssey/screens/home_screen.dart';
 import 'package:odyssey/screens/interest_screen.dart';
@@ -34,6 +35,12 @@ Future main() async {
       ),
       ChangeNotifierProvider(
         create: (context) => PageProvider(),
+      ),
+      ChangeNotifierProxyProvider<AuthServiceProvider, CourseContentProvider>(
+        create: (context) => CourseContentProvider(
+            Provider.of<AuthServiceProvider>(context, listen: false)),
+        update: (context, authServiceProvider, previous) =>
+            CourseContentProvider(authServiceProvider),
       ),
       ChangeNotifierProxyProvider<AuthServiceProvider, CourseListProvider>(
         create: (context) => CourseListProvider(
