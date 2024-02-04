@@ -262,7 +262,7 @@ class CourseListProvider with ChangeNotifier {
   Course _findCourseForInterest(String interest) {
     if (interest.toLowerCase().contains('websites')) {
       return _allCourses.firstWhere(
-        (c) => c.name == 'React',
+        (c) => c.name == 'Java',
         orElse: () => Course(
             courseID: '',
             name: '',
@@ -298,7 +298,7 @@ class CourseListProvider with ChangeNotifier {
       );
     } else if (interest.toLowerCase().contains('smart')) {
       return _allCourses.firstWhere(
-        (c) => c.name == 'Java',
+        (c) => c.name == 'C++',
         orElse: () => Course(
             courseID: '',
             name: '',
