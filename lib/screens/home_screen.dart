@@ -39,7 +39,7 @@ class HomeScreen extends StatelessWidget {
                 pageProvider.selectedIndex = index;
               }
             },
-            children: [
+            children: const [
               CoursesScreen(),
               CoursesScreen(), // added just for replacement
               ProgressScreen(),

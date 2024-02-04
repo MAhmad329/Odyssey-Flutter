@@ -68,7 +68,38 @@ class CourseCard extends StatelessWidget {
                           builder: (context) => LearningScreen(course: course),
                         ),
                       );
-                    } else {}
+                    } else {
+                      // Show popup box for course preview
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text(course.name),
+                            content: SingleChildScrollView(
+                              child: ListBody(
+                                children: <Widget>[
+                                  Text(course.description),
+                                ],
+                              ),
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                child: const Text(
+                                  'Close',
+                                  style: TextStyle(
+                                    color: Color(0xFF264653),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pop(); // Close the dialog
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
                   },
                   child: Row(
                     children: [
