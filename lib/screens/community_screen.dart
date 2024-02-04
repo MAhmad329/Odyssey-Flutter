@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:odyssey/Providers/CourseListProvider.dart';
 import 'package:provider/provider.dart';
-
 import '../constants.dart';
 import '../models/CourseModel.dart';
-import 'ChatScreen.dart';
+import 'chat_screen.dart';
 
 class CommunityScreen extends StatelessWidget {
   const CommunityScreen({Key? key}) : super(key: key);
