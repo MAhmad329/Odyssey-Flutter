@@ -4,11 +4,35 @@ import '../models/CourseModel.dart';
 import '../services/auth_services.dart';
 
 class CourseListProvider with ChangeNotifier {
+  bool _isDisposed = false;
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
+
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final AuthServiceProvider _authService;
+  List<Course> _myList = [];
+  bool _showMyList = true; // Toggle between all courses and my list
+  List<Course> get myList => _myList;
+  List<Course> get courses => _showMyList ? _myList : _allCourses;
+  bool get showMyList => _showMyList;
+  Course? _currentCourse;
 
+  // Inside CourseListProvider
   CourseListProvider(this._authService) {
-    _fetchMyList();
+    _authService.user.listen((user) {
+      if (user != null) {
+        _fetchMyList();
+      }
+    });
+  }
+
+  void clearCourseList() {
+    _myList.clear();
+    notifyListeners();
   }
 
   Stream<List<Course>> get courseStream {
@@ -31,7 +55,8 @@ class CourseListProvider with ChangeNotifier {
               String courseName = doc.data()['name'];
               Course? fullCourse = _allCourses.firstWhere(
                   (c) => c.name == courseName,
-                  orElse: () => Course(name: '', description: '', topics: []));
+                  orElse: () => Course(
+                      courseID: '', name: '', description: '', topics: []));
 
               return fullCourse != null
                   ? Course.fromMap(doc.data(), fullCourse.topics)
@@ -45,6 +70,7 @@ class CourseListProvider with ChangeNotifier {
 
   final List<Course> _allCourses = [
     Course(
+      courseID: '1',
       name: 'Java',
       description: 'Java from zero-to-hero for beginners with practice',
       topics: [
@@ -71,6 +97,7 @@ class CourseListProvider with ChangeNotifier {
       ],
     ),
     Course(
+      courseID: '2',
       name: 'Python',
       description: 'Python from zero-to-hero for beginners with practice',
       topics: [
@@ -97,6 +124,7 @@ class CourseListProvider with ChangeNotifier {
       ],
     ),
     Course(
+      courseID: '3',
       name: 'React',
       description: 'React from zero-to-hero for beginners with practice',
       topics: [
@@ -123,6 +151,7 @@ class CourseListProvider with ChangeNotifier {
       ],
     ),
     Course(
+      courseID: '4',
       name: 'Cyber',
       description: 'React from zero-to-hero for beginners with practice',
       topics: [
@@ -150,19 +179,11 @@ class CourseListProvider with ChangeNotifier {
     ),
   ];
 
-  List<Course> _myList = [];
-  bool _showMyList = true; // Toggle between all courses and my list
-  List<Course> get myList => _myList;
-  List<Course> get courses => _showMyList ? _myList : _allCourses;
-  bool get showMyList => _showMyList;
-
   // Toggle view between all courses and my list
   void toggleView(bool showMyList) {
     _showMyList = showMyList;
     notifyListeners();
   }
-
-  Course? _currentCourse;
 
   void setCurrentCourse(Course course) {
     _currentCourse = course;
@@ -191,7 +212,8 @@ class CourseListProvider with ChangeNotifier {
           String courseName = doc.data()['name'];
           Course? fullCourse = _allCourses.firstWhere(
               (c) => c.name == courseName,
-              orElse: () => Course(name: '', description: '', topics: []));
+              orElse: () =>
+                  Course(courseID: '', name: '', description: '', topics: []));
 
           // If the course exists in _allCourses, use its topics; otherwise, return null
           return fullCourse != null
@@ -215,32 +237,38 @@ class CourseListProvider with ChangeNotifier {
       }
     }
 
-    notifyListeners();
+    if (!_isDisposed) {
+      notifyListeners();
+    }
   }
 
   Course _findCourseForInterest(String interest) {
     if (interest.toLowerCase().contains('websites')) {
       return _allCourses.firstWhere(
-        (c) => c.name == 'Flutter',
-        orElse: () => Course(name: '', description: '', topics: []),
+        (c) => c.name == 'React',
+        orElse: () =>
+            Course(courseID: '', name: '', description: '', topics: []),
       );
     } else if (interest.toLowerCase().contains('network')) {
       return _allCourses.firstWhere(
         (c) => c.name == 'Cyber',
-        orElse: () => Course(name: '', description: '', topics: []),
+        orElse: () =>
+            Course(courseID: '', name: '', description: '', topics: []),
       );
     } else if (interest.toLowerCase().contains('data')) {
       return _allCourses.firstWhere(
-        (c) => c.name == 'React',
-        orElse: () => Course(name: '', description: '', topics: []),
+        (c) => c.name == 'Python',
+        orElse: () =>
+            Course(courseID: '', name: '', description: '', topics: []),
       );
     } else if (interest.toLowerCase().contains('smart')) {
       return _allCourses.firstWhere(
         (c) => c.name == 'Java',
-        orElse: () => Course(name: '', description: '', topics: []),
+        orElse: () =>
+            Course(courseID: '', name: '', description: '', topics: []),
       );
     }
-    return Course(name: '', description: '', topics: []);
+    return Course(courseID: '', name: '', description: '', topics: []);
   }
 
   Future<void> addToMyList(Course course) async {

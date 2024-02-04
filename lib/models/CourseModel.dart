@@ -11,6 +11,7 @@ class Topic {
 }
 
 class Course {
+  final String courseID;
   final String name;
   final String description;
   bool isInterested;
@@ -18,6 +19,7 @@ class Course {
   int lastTopicIndex;
 
   Course({
+    required this.courseID,
     required this.name,
     required this.description,
     this.isInterested = false,
@@ -27,6 +29,7 @@ class Course {
 
   Map<String, dynamic> toMap() {
     return {
+      'courseID': courseID,
       'name': name,
       'description': description,
       'isInterested': isInterested,
@@ -35,6 +38,7 @@ class Course {
 
   factory Course.fromMap(Map<String, dynamic> map, [List<Topic>? topics]) {
     return Course(
+      courseID: map['courseID'],
       name: map['name'],
       description: map['description'],
       isInterested: map['isInterested'] ?? false,

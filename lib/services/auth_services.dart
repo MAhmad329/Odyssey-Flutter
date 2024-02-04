@@ -25,8 +25,9 @@ class AuthServiceProvider with ChangeNotifier {
 
     bool hasCompletedSetup = userData?['hasCompletedSetup'] ?? false;
     String? selectedInterest = userData?['selectedInterest'];
-
+    // String? name = userData?['name'] ?? '';
     _currentUser = User(firebaseUser.uid, firebaseUser.email,
+        // name: name,
         hasCompletedSetup: hasCompletedSetup,
         selectedInterest: selectedInterest);
 
@@ -90,6 +91,35 @@ class AuthServiceProvider with ChangeNotifier {
       _currentUser!.hasCompletedSetup = true;
       notifyListeners();
     }
+  }
+
+  Future<void> changePassword(String newPassword) async {
+    auth.User? firebaseUser = _firebaseAuth.currentUser;
+    try {
+      await firebaseUser?.updatePassword(newPassword);
+      // Handle success
+    } on auth.FirebaseAuthException catch (e) {
+      // Handle errors, e.g., password too weak
+      print(e);
+    }
+  }
+
+  Future<String?> getUserName() async {
+    var userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(currentUser!.uid)
+        .get();
+    return userDoc.data()?['name'];
+  }
+
+  Future<void> updateUserName(String userId, String newName) async {
+    // Update the user's name in Firebase
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .update({'name': newName});
+    // Optionally, update any local state to reflect the change and notify listeners
+    notifyListeners();
   }
 
   Future<void> signOut() async {

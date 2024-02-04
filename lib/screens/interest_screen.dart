@@ -14,11 +14,14 @@ class InterestScreen extends StatefulWidget {
 }
 
 class _InterestScreenState extends State<InterestScreen> {
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     final authService =
         Provider.of<AuthServiceProvider>(context, listen: false);
     final user = authService.currentUser;
+
     return Scaffold(
       backgroundColor: const Color(0xFF264653),
       appBar: AppBar(
@@ -116,7 +119,6 @@ class _InterestScreenState extends State<InterestScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Previous question button
                     Padding(
                       padding: EdgeInsets.only(left: 25.w),
                       child: MyButton(
@@ -134,35 +136,45 @@ class _InterestScreenState extends State<InterestScreen> {
                     ),
                     Padding(
                       padding: EdgeInsets.only(right: 25.w),
-                      child: MyButton(
-                        onTap: () async {
-                          if (interestModel.currentQuestionIndex == 1 &&
-                              interestModel.selectedInterest.isNotEmpty) {
-                            // Update user's interest
-                            if (user != null) {
-                              await authService.updateUserInterest(
-                                  user.uid, interestModel.selectedInterest);
-                              await authService.completeSetup(
-                                  user.uid); // Mark setup as complete
-                            }
-                            // Navigate to the HomeScreen or next screen after setup
-                            if (mounted) {
-                              Navigator.pushReplacementNamed(
-                                  context, 'home_screen');
-                            }
-                          } else {
-                            interestModel.goToNextQuestion();
-                          }
-                        },
-                        buttonWidth: 150.w,
-                        buttonHeight: 70.h,
-                        buttonSize: 65.r,
-                        buttonColor: Colors.white,
-                        textColor: Colors.black,
-                        buttonText: interestModel.currentQuestionIndex == 0
-                            ? 'Next'
-                            : 'Submit', // Dynamic text
-                      ),
+                      child: isLoading
+                          ? CircularProgressIndicator(
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(primaryColor),
+                            )
+                          : MyButton(
+                              onTap: () async {
+                                if (interestModel.currentQuestionIndex == 1 &&
+                                    interestModel.selectedInterest.isNotEmpty) {
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+
+                                  if (user != null) {
+                                    await authService.updateUserInterest(
+                                        user.uid,
+                                        interestModel.selectedInterest);
+                                    await authService.completeSetup(user.uid);
+                                  }
+
+                                  if (mounted) {
+                                    Navigator.pushReplacementNamed(
+                                        context, 'home_screen');
+                                  }
+                                } else {
+                                  interestModel.goToNextQuestion();
+                                }
+                              },
+                              buttonWidth: 150.w,
+                              buttonHeight: 70.h,
+                              buttonSize: 65.r,
+                              buttonColor: Colors.white,
+                              textColor: Colors.black,
+                              buttonText: isLoading
+                                  ? ''
+                                  : interestModel.currentQuestionIndex == 0
+                                      ? 'Next'
+                                      : 'Submit',
+                            ),
                     ),
                   ],
                 ),

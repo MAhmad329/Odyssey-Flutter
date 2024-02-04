@@ -15,6 +15,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -85,49 +86,60 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     const Spacer(),
-                    MyButton(
-                      onTap: () async {
-                        try {
-                          var user =
-                              await authService.signInWithEmailAndPassword(
-                                  emailController.text,
-                                  passwordController.text);
-                          if (!mounted) return;
+                    isLoading
+                        ? CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(primaryColor),
+                          )
+                        : MyButton(
+                            onTap: () async {
+                              setState(() {
+                                isLoading = true;
+                              });
+                              try {
+                                var user = await authService
+                                    .signInWithEmailAndPassword(
+                                        emailController.text,
+                                        passwordController.text);
+                                if (!mounted) return;
 
-                          if (user != null) {
-                            if (user.hasCompletedSetup) {
-                              Navigator.pushReplacementNamed(
-                                  context, 'home_screen');
-                            } else {
-                              Navigator.pushReplacementNamed(
-                                  context, 'assessment_screen');
-                            }
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                    "Login failed, please check your credentials"),
-                                backgroundColor: Colors.red,
-                              ),
-                            );
-                          }
-                        } catch (e) {
-                          if (!mounted) return;
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content:
-                                  Text("Failed to sign in: ${e.toString()}"),
-                              backgroundColor: Colors.red,
-                            ),
-                          );
-                        }
-                      },
-                      buttonText: 'Login',
-                      textColor: Colors.black,
-                      buttonColor: primaryColor,
-                      buttonWidth: 355.w,
-                      buttonHeight: 50.h,
-                    ),
+                                if (user != null) {
+                                  if (user.hasCompletedSetup) {
+                                    Navigator.pushReplacementNamed(
+                                        context, 'home_screen');
+                                  } else {
+                                    Navigator.pushReplacementNamed(
+                                        context, 'assessment_screen');
+                                  }
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          "Login failed, please check your credentials"),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                }
+                              } catch (e) {
+                                if (!mounted) return;
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                        "Failed to sign in: ${e.toString()}"),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              }
+                              setState(() {
+                                isLoading = false;
+                              });
+                            },
+                            buttonText: 'Login',
+                            textColor: Colors.black,
+                            buttonColor: primaryColor,
+                            buttonWidth: 355.w,
+                            buttonHeight: 50.h,
+                          ),
                   ],
                 ),
               ),

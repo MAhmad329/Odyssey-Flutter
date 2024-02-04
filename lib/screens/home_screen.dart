@@ -20,6 +20,7 @@ class HomeScreen extends StatelessWidget {
           resizeToAvoidBottomInset: false,
           backgroundColor: const Color(0xFF264653),
           appBar: AppBar(
+            automaticallyImplyLeading: false,
             backgroundColor: primaryColor,
             foregroundColor: Colors.black,
             toolbarHeight: 75.h,

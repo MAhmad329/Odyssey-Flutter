@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 Color primaryColor = const Color(0xFFE9C46A);
+
+TextStyle kText2 = TextStyle(
+  color: Colors.black54,
+  fontWeight: FontWeight.w400,
+  fontSize: 14.sp,
+  fontFamily: 'Poppins',
+);
 
 InputDecoration kTextFieldDecoration = const InputDecoration(
   hintText: 'hint text',

@@ -5,8 +5,8 @@ import 'package:highlight/languages/python.dart';
 import 'package:odyssey/Providers/PageProvider.dart';
 import 'package:odyssey/constants.dart';
 import 'package:odyssey/providers/CourseContentProvider.dart';
+import 'package:odyssey/screens/community_screen.dart';
 import 'package:provider/provider.dart';
-
 import '../models/CourseModel.dart';
 import '../widgets/button.dart';
 
@@ -83,6 +83,18 @@ class LearningScreen extends StatelessWidget {
                 ],
               ),
             ),
+            // Inside LearningScreen Widget
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const CommunityScreen(),
+                  ),
+                );
+              },
+              child: Text('Join Community Chat'),
+            ),
+
             if (pageProvider.isCourseSelected)
               _buildCourseView(context, provider),
             if (!pageProvider.isCourseSelected)

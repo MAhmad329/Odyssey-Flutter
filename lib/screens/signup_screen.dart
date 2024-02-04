@@ -15,6 +15,8 @@ class SignupScreen extends StatefulWidget {
 class _SignupScreenState extends State<SignupScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthServiceProvider>(context);
@@ -84,36 +86,46 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                     ),
                     const Spacer(),
-                    MyButton(
-                      onTap: () async {
-                        try {
-                          var user =
-                              await authService.createUserWithEmailAndPassword(
-                                  emailController.text,
-                                  passwordController.text);
-                          if (!mounted) return;
-                          if (user != null) {
-                            Navigator.pushReplacementNamed(
-                                context, 'assessment_screen');
-                          }
-                        } catch (e) {
-                          if (!mounted) return;
-
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content:
-                                  Text("Failed to sign up: ${e.toString()}"),
-                              backgroundColor: Colors.red,
-                            ),
-                          );
-                        }
-                      },
-                      buttonText: 'Signup',
-                      textColor: Colors.black,
-                      buttonColor: primaryColor,
-                      buttonWidth: 355.w,
-                      buttonHeight: 50.h,
-                    ),
+                    isLoading
+                        ? CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(primaryColor),
+                          )
+                        : MyButton(
+                            onTap: () async {
+                              setState(() {
+                                isLoading = true;
+                              });
+                              try {
+                                var user = await authService
+                                    .createUserWithEmailAndPassword(
+                                        emailController.text,
+                                        passwordController.text);
+                                if (!mounted) return;
+                                if (user != null) {
+                                  Navigator.pushReplacementNamed(
+                                      context, 'assessment_screen');
+                                }
+                              } catch (e) {
+                                if (!mounted) return;
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                        "Failed to sign up: ${e.toString()}"),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              }
+                              setState(() {
+                                isLoading = false;
+                              });
+                            },
+                            buttonText: 'Signup',
+                            textColor: Colors.black,
+                            buttonColor: primaryColor,
+                            buttonWidth: 355.w,
+                            buttonHeight: 50.h,
+                          ),
                   ],
                 ),
               ),
