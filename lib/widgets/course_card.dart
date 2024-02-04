@@ -59,14 +59,16 @@ class CourseCard extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Provider.of<CourseContentProvider>(context, listen: false)
-                        .setCurrentCourse(course);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => LearningScreen(course: course),
-                      ),
-                    );
+                    if (isInMyList) {
+                      Provider.of<CourseContentProvider>(context, listen: false)
+                          .setCurrentCourse(course);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LearningScreen(course: course),
+                        ),
+                      );
+                    } else {}
                   },
                   child: Row(
                     children: [

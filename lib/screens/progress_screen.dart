@@ -8,38 +8,39 @@ import '../Providers/CourseListProvider.dart';
 import '../widgets/button.dart';
 
 class ProgressScreen extends StatelessWidget {
+  const ProgressScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     final courseListProvider =
         Provider.of<CourseListProvider>(context, listen: false);
-
     final pageProvider = Provider.of<PageProvider>(context, listen: false);
 
     return StreamBuilder<List<Course>>(
       stream: courseListProvider.courseStream,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          // Centering and sizing the CircularProgressIndicator
           return Center(
             child: SizedBox(
-              width: 50.w, // Adjust the size as needed
-              height: 50.h, // Adjust the size as needed
+              width: 50.w,
+              height: 50.h,
               child: CircularProgressIndicator(color: primaryColor),
             ),
           );
         }
 
+        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          // Show a message if there are no courses
+          return _buildNoCoursesMessage("No courses found");
+        }
+
         List<Course> allCourses = snapshot.data ?? [];
         List<Course> completedCourses = allCourses
-            .where((course) =>
-                course.lastTopicIndex ==
-                course.topics.length - 1) // Change here for zero-based index
+            .where(
+                (course) => course.lastTopicIndex == course.topics.length - 1)
             .toList();
-
         List<Course> inProgressCourses = allCourses
-            .where((course) =>
-                course.lastTopicIndex <
-                course.topics.length - 1) // Change here for zero-based index
+            .where((course) => course.lastTopicIndex < course.topics.length - 1)
             .toList();
 
         return Scaffold(
@@ -83,85 +84,88 @@ class ProgressScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              if (pageProvider.isCompletedSelected)
-                _buildCompletedView(completedCourses),
-              if (!pageProvider.isCompletedSelected)
-                _buildProgressView(context, inProgressCourses),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: pageProvider.isCompletedSelected
+                      ? _buildCompletedView(completedCourses)
+                      : _buildProgressView(context, inProgressCourses),
+                ),
+              ),
             ],
           ),
         );
       },
     );
   }
-}
 
-Widget _buildCompletedView(List<Course> completedCourses) {
-  if (completedCourses.isEmpty) {
-    return _buildNoCoursesMessage("No courses completed till now");
-  }
+  Widget _buildCompletedView(List<Course> completedCourses) {
+    if (completedCourses.isEmpty) {
+      return _buildNoCoursesMessage("No courses completed till now");
+    }
 
-  return Column(
-    children: completedCourses.map((course) {
-      return Card(
-        color: Colors.amber[200], // Adjust color to match the screenshot
-        child: Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                course.name,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.sp, // Adjust font size as needed
+    return Column(
+      children: completedCourses.map((course) {
+        return Card(
+          color: Colors.amber[200], // Adjust color to match the screenshot
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  course.name,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.sp, // Adjust font size as needed
+                  ),
                 ),
-              ),
-              SizedBox(height: 8.h),
-              ClipRRect(
-                borderRadius: const BorderRadius.all(
-                    Radius.circular(10)), // Rounded corners
-                child: Stack(
-                  children: [
-                    LinearProgressIndicator(
-                      value: 1.0, // Completed course, so progress is 100%
-                      minHeight: 20.h, // Adjust for the desired thickness
-                      backgroundColor: Colors.grey.shade300,
-                      color: Colors.teal[300],
-                    ),
-                    Positioned.fill(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.w),
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '100%', // 100% completion
-                              style: TextStyle(
-                                fontFamily: 'Kameron',
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                SizedBox(height: 8.h),
+                ClipRRect(
+                  borderRadius: const BorderRadius.all(
+                      Radius.circular(10)), // Rounded corners
+                  child: Stack(
+                    children: [
+                      LinearProgressIndicator(
+                        value: 1.0, // Completed course, so progress is 100%
+                        minHeight: 20.h, // Adjust for the desired thickness
+                        backgroundColor: Colors.grey.shade300,
+                        color: Colors.teal[300],
+                      ),
+                      Positioned.fill(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.w),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '100%', // 100% completion
+                                style: TextStyle(
+                                  fontFamily: 'Kameron',
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(height: 8.h),
-              Text(
-                'Completed', // Display completion status
-                style: TextStyle(
-                  fontSize: 14.sp, // Adjust font size as needed
+                SizedBox(height: 8.h),
+                Text(
+                  'Completed', // Display completion status
+                  style: TextStyle(
+                    fontSize: 14.sp, // Adjust font size as needed
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      );
-    }).toList(),
-  );
+        );
+      }).toList(),
+    );
+  }
 }
 
 Widget _buildProgressView(
@@ -245,7 +249,7 @@ Widget _buildProgressView(
 Widget _buildNoCoursesMessage(String message) {
   return Container(
     color: Colors.amber, // Yellow color
-    padding: EdgeInsets.all(16.0),
+    padding: const EdgeInsets.all(16.0),
     child: Center(
       child: Text(
         message,

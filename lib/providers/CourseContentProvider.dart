@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -12,13 +11,26 @@ class CourseContentProvider with ChangeNotifier {
   String _output = '';
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final AuthServiceProvider _authService;
+  String? _editedCode;
+  String get editedCode => _editedCode ?? currentTopic.codeExample ?? '';
+  Course? get currentCourse => _currentCourse;
+  String get currentCodeExample => currentTopic.codeExample ?? '';
 
   CourseContentProvider(this._authService);
 
   String get output => _output;
   Future<void> runCode(String code) async {
+    if (_currentCourse == null) {
+      _output = "No course selected";
+      notifyListeners();
+      return;
+    }
+    // Use dynamic values
+    String language = _currentCourse!.language;
+    String mainFileName = _currentCourse!.mainFileName;
+
     final response = await http.post(
-      Uri.parse('https://glot.io/api/run/java/latest'),
+      Uri.parse('https://glot.io/api/run/$language/latest'),
       headers: <String, String>{
         'Content-Type': 'application/json',
         'Authorization':
@@ -26,7 +38,7 @@ class CourseContentProvider with ChangeNotifier {
       },
       body: jsonEncode({
         'files': [
-          {'name': 'Main.java', 'content': code}
+          {'name': mainFileName, 'content': code}
         ],
       }),
     );
@@ -51,13 +63,9 @@ class CourseContentProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  String? _editedCode;
-
   void updateEditedCode(String newCode) {
     _editedCode = newCode;
   }
-
-  String get editedCode => _editedCode ?? currentTopic.codeExample ?? '';
 
   void resetEditedCode() {
     _editedCode = currentTopic.codeExample;
@@ -90,8 +98,6 @@ class CourseContentProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Course? get currentCourse => _currentCourse;
-
   Topic get currentTopic =>
       _currentCourse?.topics[_currentTopicIndex] ??
       Topic(title: '', content: '');
@@ -100,6 +106,7 @@ class CourseContentProvider with ChangeNotifier {
     if (_currentTopicIndex < (_currentCourse?.topics.length ?? 0) - 1) {
       _currentTopicIndex++;
       updateLastTopicIndexInFirebase();
+      resetEditedCode();
       notifyListeners();
     }
   }
@@ -107,6 +114,7 @@ class CourseContentProvider with ChangeNotifier {
   void previousTopic() {
     if (_currentTopicIndex > 0) {
       _currentTopicIndex--;
+      resetEditedCode();
       notifyListeners();
     }
   }
@@ -124,6 +132,4 @@ class CourseContentProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-
-  String get currentCodeExample => currentTopic.codeExample ?? '';
 }

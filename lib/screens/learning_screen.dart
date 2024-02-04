@@ -2,6 +2,7 @@ import 'package:code_text_field/code_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:highlight/languages/python.dart';
+import 'package:odyssey/Providers/CourseListProvider.dart';
 import 'package:odyssey/Providers/PageProvider.dart';
 import 'package:odyssey/constants.dart';
 import 'package:odyssey/providers/CourseContentProvider.dart';
@@ -28,76 +29,83 @@ class LearningScreen extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: Column(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const CommunityScreen(),
+            ),
+          );
+        },
+        backgroundColor: const Color(0xFF2A9D8F),
+        child: const Icon(Icons.people, color: Colors.black),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      body: SingleChildScrollView(
+        // Make the main content scrollable
+        child: Column(
+          children: [
+            _buildTopButtons(context),
+            _buildContent(context),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTopButtons(BuildContext context) {
+    final pageProvider = Provider.of<PageProvider>(context);
+    final courseContentProvider =
+        Provider.of<CourseContentProvider>(context, listen: false);
+    return Container(
+      color: const Color(0xFF264653),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Expanded(
-            child: _buildUI(context),
-          )
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: MyButton(
+              onTap: () {
+                pageProvider.toggleMode(true);
+                courseContentProvider.resetEditedCode();
+              },
+              buttonText: 'Course',
+              textColor: Colors.black,
+              buttonColor: pageProvider.isCourseSelected
+                  ? const Color(0xFF2A9D8F)
+                  : const Color(0xFFE0E1DD),
+              buttonHeight: 60.h,
+              buttonWidth: 190.w,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: MyButton(
+              onTap: () {
+                pageProvider.toggleMode(false);
+              },
+              buttonText: 'Practice',
+              textColor: Colors.black,
+              buttonColor: !pageProvider.isCourseSelected
+                  ? const Color(0xFF2A9D8F)
+                  : const Color(0xFFE0E1DD),
+              buttonHeight: 60.h,
+              buttonWidth: 190.w,
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildUI(BuildContext context) {
-    final pageProvider = Provider.of<PageProvider>(context);
+  Widget _buildContent(BuildContext context) {
     return Consumer<CourseContentProvider>(
       builder: (context, provider, child) {
         return Column(
           children: [
-            Container(
-              color: const Color(0xFF264653),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: MyButton(
-                      onTap: () {
-                        pageProvider.toggleMode(true);
-                        provider.resetEditedCode();
-                      },
-                      buttonText: 'Course',
-                      textColor: Colors.black,
-                      buttonColor: pageProvider.isCourseSelected
-                          ? const Color(0xFF2A9D8F)
-                          : const Color(0xFFE0E1DD),
-                      buttonHeight: 60.h,
-                      buttonWidth: 190.w,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: MyButton(
-                      onTap: () {
-                        pageProvider.toggleMode(false);
-                      },
-                      buttonText: 'Practice',
-                      textColor: Colors.black,
-                      buttonColor: !pageProvider.isCourseSelected
-                          ? const Color(0xFF2A9D8F)
-                          : const Color(0xFFE0E1DD),
-                      buttonHeight: 60.h,
-                      buttonWidth: 190.w,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            // Inside LearningScreen Widget
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const CommunityScreen(),
-                  ),
-                );
-              },
-              child: Text('Join Community Chat'),
-            ),
-
-            if (pageProvider.isCourseSelected)
+            if (Provider.of<PageProvider>(context).isCourseSelected)
               _buildCourseView(context, provider),
-            if (!pageProvider.isCourseSelected)
+            if (!Provider.of<PageProvider>(context).isCourseSelected)
               _buildPracticeView(context, provider),
           ],
         );
@@ -117,7 +125,7 @@ class LearningScreen extends StatelessWidget {
                 height: 200.h,
                 width: double.infinity.w,
                 fit: BoxFit.fill,
-                image: const AssetImage('assets/java.png'),
+                image: NetworkImage(course.courseImage),
               ),
             ),
             SizedBox(height: 25.h),
@@ -200,8 +208,6 @@ class LearningScreen extends StatelessWidget {
                     const Column(
                       children: [
                         Text('Task'),
-                        Text(
-                            'Replace the XX part of the code with the right syntax'),
                       ],
                     ),
                     SizedBox(height: 50.h),
@@ -248,14 +254,13 @@ class LearningScreen extends StatelessWidget {
             if (provider.currentTopic.codeExample == null)
               Center(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(
-                      vertical: 50.h), // Adjust padding as needed
+                  padding: EdgeInsets.symmetric(vertical: 50.h),
                   child: Text(
                     'This topic has no exercise',
-                    textAlign: TextAlign.center, // Center align the text
+                    textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 24.sp, // Set a font size (adjust as needed)
-                      color: Colors.black, // Set text color
+                      fontSize: 24.sp,
+                      color: Colors.black,
                     ),
                   ),
                 ),

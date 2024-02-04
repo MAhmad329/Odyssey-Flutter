@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:odyssey/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import '../models/ChatModel.dart';
 import '../models/CourseModel.dart';
 import '../providers/ChatProvider.dart';
 import '../services/auth_services.dart';

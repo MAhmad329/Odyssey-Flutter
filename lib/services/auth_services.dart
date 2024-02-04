@@ -118,7 +118,6 @@ class AuthServiceProvider with ChangeNotifier {
         .collection('users')
         .doc(userId)
         .update({'name': newName});
-    // Optionally, update any local state to reflect the change and notify listeners
     notifyListeners();
   }
 

@@ -17,6 +17,9 @@ class Course {
   bool isInterested;
   final List<Topic> topics;
   int lastTopicIndex;
+  final String language; // Now a required field without a default value
+  final String mainFileName;
+  final String courseImage;
 
   Course({
     required this.courseID,
@@ -25,6 +28,9 @@ class Course {
     this.isInterested = false,
     required this.topics,
     this.lastTopicIndex = 0, // Default to the first topic
+    required this.language, // Required field
+    required this.mainFileName,
+    required this.courseImage, // Required field
   });
 
   Map<String, dynamic> toMap() {
@@ -33,6 +39,9 @@ class Course {
       'name': name,
       'description': description,
       'isInterested': isInterested,
+      'language': language, // Include in map
+      'mainFileName': mainFileName,
+      'courseImage': courseImage // Include in map
     };
   }
 
@@ -44,6 +53,9 @@ class Course {
       isInterested: map['isInterested'] ?? false,
       topics: topics ?? [],
       lastTopicIndex: map['lastTopicIndex'] ?? 0,
+      language: map['language'],
+      mainFileName: map['mainFileName'],
+      courseImage: map['courseImage'],
     );
   }
 }
