@@ -47,8 +47,8 @@ class ChatScreen extends StatelessWidget {
               stream: chatProvider.getMessages(course.courseID),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
+                  return Center(
+                    child: CircularProgressIndicator(color: primaryColor),
                   );
                 }
 

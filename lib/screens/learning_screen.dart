@@ -2,7 +2,6 @@ import 'package:code_text_field/code_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:highlight/languages/python.dart';
-import 'package:odyssey/Providers/CourseListProvider.dart';
 import 'package:odyssey/Providers/PageProvider.dart';
 import 'package:odyssey/constants.dart';
 import 'package:odyssey/providers/CourseContentProvider.dart';
@@ -145,9 +144,13 @@ class LearningScreen extends StatelessWidget {
                         size: 50.r,
                       ),
                     ),
-                    Text(
-                      provider.currentTopic.title,
-                      style: TextStyle(fontSize: 24.sp),
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          provider.currentTopic.title,
+                          style: TextStyle(fontSize: 24.sp),
+                        ),
+                      ),
                     ),
                     MyButton(
                       onTap: () {

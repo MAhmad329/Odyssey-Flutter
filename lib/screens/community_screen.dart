@@ -29,7 +29,7 @@ class CommunityScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           Course course = courseListProvider.myList[index];
           return Container(
-            margin: EdgeInsets.all(15.0.r),
+            margin: EdgeInsets.all(5.0.r),
             decoration: BoxDecoration(
               color: primaryColor, // Yellow box
               borderRadius: BorderRadius.circular(10.0), // Rounded corners
@@ -37,7 +37,8 @@ class CommunityScreen extends StatelessWidget {
             child: ListTile(
               title: Text(
                 course.name,
-                style: TextStyle(color: Colors.black), // Custom text style
+                style:
+                    const TextStyle(color: Colors.black), // Custom text style
               ),
               onTap: () {
                 // Navigate to the ChatScreen for the selected course
