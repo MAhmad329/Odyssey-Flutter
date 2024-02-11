@@ -2,11 +2,17 @@ class Topic {
   final String title;
   final String content;
   final String? codeExample;
+  final String? mcqQuestion; // MCQ question
+  final List<String>? mcqOptions; // MCQ options
+  final int? mcqAnswerIndex; // Index of the correct answer
 
   Topic({
     required this.title,
     required this.content,
     this.codeExample,
+    this.mcqQuestion,
+    this.mcqOptions,
+    this.mcqAnswerIndex,
   });
 }
 

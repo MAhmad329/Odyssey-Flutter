@@ -68,7 +68,9 @@ class CourseContentProvider with ChangeNotifier {
   }
 
   void resetEditedCode() {
+    _output = '';
     _editedCode = currentTopic.codeExample;
+
     notifyListeners();
   }
 

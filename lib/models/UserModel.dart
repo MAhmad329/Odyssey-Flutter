@@ -4,7 +4,11 @@ class User {
   String? name;
   bool hasCompletedSetup;
   String? selectedInterest;
+  String? assessmentLevel;
 
   User(this.uid, this.email,
-      {this.name, this.hasCompletedSetup = false, this.selectedInterest});
+      {this.name,
+      this.hasCompletedSetup = false,
+      this.selectedInterest,
+      this.assessmentLevel});
 }

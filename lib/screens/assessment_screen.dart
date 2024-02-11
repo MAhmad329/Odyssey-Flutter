@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:odyssey/constants.dart';
+import 'package:odyssey/screens/summary_screen.dart';
 import 'package:odyssey/widgets/button.dart';
 import 'package:provider/provider.dart';
 import '../Providers/AssessmentProvider.dart';
@@ -14,6 +15,7 @@ class AssessmentScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: const Color(0xFF264653),
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           backgroundColor: primaryColor,
           foregroundColor: Colors.black,
           toolbarHeight: 75.h,
@@ -137,8 +139,20 @@ class AssessmentScreen extends StatelessWidget {
                               child: MyButton(
                                 onTap: () {
                                   if (isLastQuestion) {
-                                    Navigator.pushNamed(
-                                        context, 'interest_screen');
+                                    final provider =
+                                        Provider.of<AssessmentProvider>(context,
+                                            listen: false);
+                                    final score = provider.calculateScore();
+                                    final level =
+                                        provider.determineLevel(score);
+
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => SummaryScreen(
+                                            score: score, level: level),
+                                      ),
+                                    );
                                   } else {
                                     assessmentModel.nextQuestion();
                                   }

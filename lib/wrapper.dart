@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:odyssey/screens/assessment_screen.dart';
 import 'package:odyssey/screens/home_screen.dart';
+import 'package:odyssey/screens/interest_screen.dart';
 import 'package:odyssey/screens/login_screen.dart';
 import 'package:odyssey/services/auth_services.dart';
 import 'package:provider/provider.dart';
@@ -29,8 +30,10 @@ class Wrapper extends StatelessWidget {
         final User? user = snapshot.data;
         if (user == null) {
           return const LoginScreen();
-        } else if (!user.hasCompletedSetup) {
+        } else if (user.assessmentLevel == '') {
           return const AssessmentScreen();
+        } else if (!user.hasCompletedSetup) {
+          return const InterestScreen();
         } else {
           return HomeScreen();
         }

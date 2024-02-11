@@ -10,9 +10,17 @@ import 'package:provider/provider.dart';
 import '../models/CourseModel.dart';
 import '../widgets/button.dart';
 
-class LearningScreen extends StatelessWidget {
+class LearningScreen extends StatefulWidget {
   const LearningScreen({Key? key, required this.course}) : super(key: key);
   final Course course;
+
+  @override
+  State<LearningScreen> createState() => _LearningScreenState();
+}
+
+class _LearningScreenState extends State<LearningScreen> {
+  int? selectedOptionIndex;
+  bool? isCorrect;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -124,49 +132,63 @@ class LearningScreen extends StatelessWidget {
                 height: 200.h,
                 width: double.infinity.w,
                 fit: BoxFit.fill,
-                image: NetworkImage(course.courseImage),
+                image: NetworkImage(widget.course.courseImage),
               ),
             ),
             SizedBox(height: 25.h),
-            Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    MyButton(
-                      onTap: () {
-                        provider.previousTopic();
-                      },
-                      buttonSize: 50.r,
-                      isCircular: true,
-                      icon: Icon(
-                        Icons.chevron_left,
-                        size: 50.r,
-                      ),
-                    ),
-                    Expanded(
-                      child: Center(
-                        child: Text(
-                          provider.currentTopic.title,
-                          style: TextStyle(fontSize: 24.sp),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 15.0.h, horizontal: 10.w),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      MyButton(
+                        onTap: () {
+                          setState(() {
+                            selectedOptionIndex = null;
+                            isCorrect = null;
+                          });
+                          provider.previousTopic();
+                        },
+                        buttonSize: 50.r,
+                        isCircular: true,
+                        icon: Icon(
+                          Icons.chevron_left,
+                          size: 50.r,
                         ),
                       ),
-                    ),
-                    MyButton(
-                      onTap: () {
-                        provider.nextTopic();
-                      },
-                      buttonSize: 50.r,
-                      isCircular: true,
-                      icon: Icon(
-                        Icons.chevron_right,
-                        size: 50.r,
+                      Expanded(
+                        child: Center(
+                          child: Text(
+                            provider.currentTopic.title,
+                            style: TextStyle(fontSize: 24.sp),
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                Text(provider.currentTopic.content),
-              ],
+                      MyButton(
+                        onTap: () {
+                          setState(() {
+                            selectedOptionIndex = null;
+                            isCorrect = null;
+                          });
+                          provider.nextTopic();
+                        },
+                        buttonSize: 50.r,
+                        isCircular: true,
+                        icon: Icon(
+                          Icons.chevron_right,
+                          size: 50.r,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 25.h,
+                  ),
+                  Text(provider.currentTopic.content),
+                ],
+              ),
             ),
             SizedBox(
               height: 50.h,
@@ -245,7 +267,13 @@ class LearningScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text('Output:'),
-                              Text(provider.output),
+                              SizedBox(
+                                width: 300, // Adjust width as needed
+                                child: Text(
+                                  provider.output,
+                                  overflow: TextOverflow.clip,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -254,7 +282,50 @@ class LearningScreen extends StatelessWidget {
                   ],
                 ),
               ),
-            if (provider.currentTopic.codeExample == null)
+            if (provider.currentTopic.mcqQuestion != null)
+              Container(
+                color: Colors.white,
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      provider.currentTopic.mcqQuestion!,
+                      style: TextStyle(
+                          fontSize: 20.sp, fontWeight: FontWeight.bold),
+                    ),
+                    ...provider.currentTopic.mcqOptions!
+                        .asMap()
+                        .entries
+                        .map((entry) {
+                      int idx = entry.key;
+                      String option = entry.value;
+                      return Container(
+                        margin: EdgeInsets.only(top: 8),
+                        color: selectedOptionIndex == idx
+                            ? (isCorrect == true ? Colors.green : Colors.red)
+                            : Colors
+                                .white, // Apply color to the whole container
+                        child: ListTile(
+                          title: Text(
+                            option,
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          onTap: () {
+                            setState(() {
+                              selectedOptionIndex = idx;
+                              isCorrect =
+                                  idx == provider.currentTopic.mcqAnswerIndex;
+                            });
+                          },
+                        ),
+                      );
+                    }).toList(),
+                  ],
+                ),
+              ),
+            if (provider.currentTopic.codeExample == null &&
+                provider.currentTopic.mcqQuestion == null)
               Center(
                 child: Padding(
                   padding: EdgeInsets.symmetric(vertical: 50.h),

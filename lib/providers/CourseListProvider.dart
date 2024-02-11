@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../models/CourseModel.dart';
 import '../services/auth_services.dart';
+import '../services/courses.dart';
 
 class CourseListProvider with ChangeNotifier {
   bool _isDisposed = false;
@@ -66,130 +67,7 @@ class CourseListProvider with ChangeNotifier {
     );
   }
 
-  final List<Course> _allCourses = [
-    Course(
-        courseID: '1',
-        name: 'Java',
-        description: 'Java from zero-to-hero for beginners with practice',
-        topics: [
-          Topic(
-              title: 'Introduction to Java',
-              content: 'Java is...',
-              codeExample:
-                  "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Hello, World!\");\n    }\n}"),
-          Topic(
-              title: 'Variables in Java',
-              content: 'Variables are...',
-              codeExample:
-                  "public class Main {\n    public static void main(String[] args) {\n        String name = \"Java\";\n        int number = 10;\n        System.out.println(\"Name: \" + name + \", Number: \" + number);\n    }\n}"),
-          Topic(
-              title: 'Loops in Java',
-              content: 'Loops are...',
-              codeExample:
-                  "public class Main {\n    public static void main(String[] args) {\n        for(int i = 0; i < 5; i++) {\n            System.out.println(\"Loop iteration: \" + i);\n        }\n    }\n}"),
-          Topic(
-              title: 'If-Else in Java',
-              content: 'If-Else are...',
-              codeExample:
-                  "public class Main {\n    public static void main(String[] args) {\n        int number = 5;\n        if(number > 0) {\n            System.out.println(\"Number is positive.\");\n        } else {\n            System.out.println(\"Number is not positive.\");\n        }\n    }\n}"),
-        ],
-        language: 'java',
-        mainFileName: 'Main.java',
-        courseImage:
-            'https://developers.redhat.com/sites/default/files/styles/share/public/ST-java1_2x.png?itok=LP1xR4KL'),
-    Course(
-        courseID: '2',
-        name: 'Python',
-        description: 'Python from zero-to-hero for beginners with practice',
-        topics: [
-          Topic(
-              title: 'Introduction to Python',
-              content: 'Python is...',
-              codeExample: "print('Hello, World!')"),
-          Topic(
-              title: 'Variables in Python',
-              content: 'Variables are...',
-              codeExample:
-                  "name = 'Python'\nnumber = 10\nprint(f'Name: {name}, Number: {number}')"),
-          Topic(
-              title: 'Loops in Python',
-              content: 'Loops are...',
-              codeExample:
-                  "for i in range(5):\n    print(f'Loop iteration: {i}')"),
-          Topic(
-              title: 'If-Else in Python',
-              content: 'If-Else are...',
-              codeExample:
-                  "number = 5\nif number > 0:\n    print('Number is positive.')\nelse:\n    print('Number is not positive.')"),
-        ],
-        language: 'python',
-        mainFileName: 'main.py',
-        courseImage:
-            'https://miro.medium.com/v2/resize:fit:1400/1*ycIMlwgwicqlO6PcFRA-Iw.png'),
-    Course(
-      courseID: '3',
-      name: 'C++',
-      description: 'C++ from zero-to-hero for beginners with practice',
-      topics: [
-        Topic(
-          title: 'Introduction to C++',
-          content: 'C++ is...',
-          // codeExample:
-          //     "#include <iostream>\nint main() {\n    std::cout << \"Hello World\" << std::endl;\n    return 0;\n}",
-        ),
-        Topic(
-          title: 'Variables in C++',
-          content: 'Variables are...',
-          codeExample:
-              "#include <iostream>\nint main() {\n    int myNumber = 10;\n    double myFloatNum = 5.99;\n    char myLetter = 'D';\n    bool myBoolean = true;\n    std::string myText = \"Hello\";\n\n    std::cout << \"Integer: \" << myNumber << '\\n';\n    std::cout << \"Double: \" << myFloatNum << '\\n';\n    std::cout << \"Char: \" << myLetter << '\\n';\n    std::cout << \"Boolean: \" << myBoolean << '\\n';\n    std::cout << \"String: \" << myText << std::endl;\n    return 0;\n}",
-        ),
-        Topic(
-          title: 'Loops in C++',
-          content: 'Loops are...',
-          codeExample:
-              "#include <iostream>\nint main() {\n    for(int i = 0; i < 5; i++) {\n        std::cout << \"Loop iteration: \" << i << std::endl;\n    }\n    return 0;\n}",
-        ),
-        Topic(
-          title: 'If-Else in C++',
-          content: 'If-Else are...',
-          codeExample:
-              "#include <iostream>\nint main() {\n    int number = 10;\n    if(number > 0) {\n        std::cout << \"Number is positive.\" << std::endl;\n    } else {\n        std::cout << \"Number is non-positive.\" << std::endl;\n    }\n    return 0;\n}",
-        ),
-      ],
-      language: 'cpp',
-      mainFileName: 'Main.cpp',
-      courseImage:
-          'https://beecrowd.io/wp-content/uploads/2023/01/Post-1_2-BKG.jpg',
-    ),
-    Course(
-        courseID: '4',
-        name: 'Cyber',
-        description:
-            'CyberSecurity from zero-to-hero for beginners with practice',
-        topics: [
-          Topic(
-              title: 'Introduction to CyberSecurity',
-              content: 'Cyber Security is is...',
-              codeExample: "print('Something about if else in python')"),
-          Topic(
-            title: 'Something in cyber security',
-            content: 'Cyber is ...',
-            // No code example for this topic
-          ),
-          Topic(
-              title: 'something else in cyber security',
-              content: 'Loops are...',
-              codeExample: "print('Something about if else in python')"),
-          Topic(
-              title: ' something else else in cyber security',
-              content: 'If-Else are...',
-              codeExample: "print('Something about if else in python')"),
-        ],
-        language: 'python',
-        mainFileName: 'Main.py',
-        courseImage:
-            'https://www.cloud4c.com/ph/sites/ph/files/2024-01/Cybersecurity-strategy-services-cloud4c-webpage-1.webp'),
-  ];
+  final List<Course> _allCourses = allCourses;
 
   // Toggle view between all courses and my list
   void toggleView(bool showMyList) {

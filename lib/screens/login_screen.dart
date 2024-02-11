@@ -104,12 +104,18 @@ class _LoginScreenState extends State<LoginScreen> {
                                 if (!mounted) return;
 
                                 if (user != null) {
-                                  if (user.hasCompletedSetup) {
+                                  // Check if the user has completed setup and the assessment
+                                  if (user.hasCompletedSetup &&
+                                      user.assessmentLevel != '') {
                                     Navigator.pushReplacementNamed(
                                         context, 'home_screen');
-                                  } else {
+                                  } else if (user.assessmentLevel == '') {
+                                    // User has completed setup but hasn't completed the assessment
                                     Navigator.pushReplacementNamed(
                                         context, 'assessment_screen');
+                                  } else if (!user.hasCompletedSetup) {
+                                    Navigator.pushReplacementNamed(
+                                        context, 'interest_screen');
                                   }
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(

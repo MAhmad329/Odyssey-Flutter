@@ -25,11 +25,12 @@ class AuthServiceProvider with ChangeNotifier {
 
     bool hasCompletedSetup = userData?['hasCompletedSetup'] ?? false;
     String? selectedInterest = userData?['selectedInterest'];
-    // String? name = userData?['name'] ?? '';
+    String? assessmentLevel = userData?['level'] ?? ''; // Fetch the level
+
     _currentUser = User(firebaseUser.uid, firebaseUser.email,
-        // name: name,
         hasCompletedSetup: hasCompletedSetup,
-        selectedInterest: selectedInterest);
+        selectedInterest: selectedInterest,
+        assessmentLevel: assessmentLevel); // Set the level
 
     return _currentUser;
   }
@@ -79,6 +80,14 @@ class AuthServiceProvider with ChangeNotifier {
     if (_currentUser != null) {
       _currentUser!.selectedInterest = interest;
       notifyListeners();
+    }
+  }
+
+  Future<void> updateUserLevel(String level) async {
+    if (_currentUser != null) {
+      await _firestore.collection('users').doc(_currentUser!.uid).update({
+        'level': level,
+      });
     }
   }
 

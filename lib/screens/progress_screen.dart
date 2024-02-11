@@ -14,7 +14,7 @@ class ProgressScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final courseListProvider =
         Provider.of<CourseListProvider>(context, listen: false);
-    final pageProvider = Provider.of<PageProvider>(context, listen: false);
+    final pageProvider = Provider.of<PageProvider>(context);
 
     return StreamBuilder<List<Course>>(
       stream: courseListProvider.courseStream,
@@ -232,7 +232,7 @@ Widget _buildProgressView(
               ),
               SizedBox(height: 8.h),
               Text(
-                '$topicsCovered out of $totalTopics',
+                'Topics: $topicsCovered out of $totalTopics',
                 style: TextStyle(
                   fontFamily: 'Kameron',
                   fontSize: 16.sp, // Adjust font size as needed
