@@ -103,7 +103,7 @@ class ProfileScreen extends StatelessWidget {
 
 void _editName(BuildContext context, AuthServiceProvider authProvider,
     String? currentName) {
-  final pageProvider = Provider.of<PageProvider>(context);
+  final pageProvider = Provider.of<PageProvider>(context, listen: false);
   final TextEditingController nameController =
       TextEditingController(text: currentName);
   showDialog(
@@ -152,8 +152,12 @@ void _editName(BuildContext context, AuthServiceProvider authProvider,
                 onPressed: () async {
                   await authProvider.updateUserName(
                       authProvider.currentUser!.uid, nameController.text);
+                  Navigator.of(context).pop(); // Close the dialog
                   pageProvider.selectedIndex = 0;
-                  Navigator.of(context).pop();
+                  Future.delayed(Duration.zero, () {
+                    Navigator.of(context).popAndPushNamed(
+                        'home_screen'); // Pop the current screen
+                  });
                 },
                 child: Text(
                   "Update",
