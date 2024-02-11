@@ -103,7 +103,7 @@ class ProfileScreen extends StatelessWidget {
 
 void _editName(BuildContext context, AuthServiceProvider authProvider,
     String? currentName) {
-  final pageProvider = Provider.of<PageProvider>(context, listen: false);
+  final pageProvider = Provider.of<PageProvider>(context);
   final TextEditingController nameController =
       TextEditingController(text: currentName);
   showDialog(
